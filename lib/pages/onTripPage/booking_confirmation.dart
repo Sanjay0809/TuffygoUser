@@ -28,6 +28,14 @@ import 'drop_loc_select.dart';
 import 'invoice.dart';
 import 'map_page.dart';
 
+List cars=[
+  {'name': 'Roshan','price':200},
+  {'name': 'Rishi','price':200},
+  {'name': 'Abhishek','price':200},
+  {'name': 'Abhijeet','price':200},
+
+];
+
 // ignore: must_be_immutable
 class BookingConfirmation extends StatefulWidget {
   // const BookingConfirmation({Key? key}) : super(key: key);
@@ -55,6 +63,7 @@ bool lowWalletBalance = false;
 bool tripReqError = false;
 List rentalOption = [];
 int rentalChoosenOption = 0;
+int pro=0;
 Animation<double>? _animation;
 
 class _BookingConfirmationState extends State<BookingConfirmation>
@@ -141,6 +150,90 @@ class _BookingConfirmationState extends State<BookingConfirmation>
     getLocs();
 
     super.initState();
+  }
+  void ProRiderContainer() {
+    Column (
+      children: [
+      Container(
+      width:50,
+      height: 4,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular((64)),),
+
+    ),
+
+    SizedBox(
+    height: 8,
+    ),
+
+    Text('Select Your Captain',style: GoogleFonts.notoSans(
+    color: Colors.white,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+
+    ),),
+
+    Padding(
+    padding: const EdgeInsets.only(top:8),
+    child: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+
+    children: [
+    //search bar
+    SizedBox(
+    width:296,
+    height: 56,
+    child: TextField(
+    cursorColor: Colors.white,
+    decoration: InputDecoration(
+    prefixIcon: Icon(Icons.search),
+    fillColor: Colors.black.withOpacity(.8),
+    focusColor: Colors.white,
+    focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.white), // Set the color for focused border
+    borderRadius: BorderRadius.circular(24),
+    ),
+    border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(24),
+    ),
+    // labelText: 'Filled',
+    hintText: 'Search By Name, Car Number, driver id..',
+    hintStyle: GoogleFonts.notoSans(
+    color: Colors.white24
+    ),
+    filled: true,
+    ),
+    ),
+    ),
+    SizedBox(width:8),
+
+    Container(
+    height: 40,
+    width: 40,
+    decoration: BoxDecoration(
+    shape: BoxShape.circle,
+    color:Colors.white.withOpacity(.1)
+    ),
+    child:Icon(Icons.downloading_sharp,
+    color: Colors.white60,),
+    ),
+    SizedBox(width:8),
+
+    //Referral Icon
+    Container(
+    height: 40,
+    width: 40,
+    decoration: BoxDecoration(
+    shape: BoxShape.circle,
+    color:Colors.white.withOpacity(.1),
+    ),
+    child:Icon(Icons.receipt_long_rounded,
+    color: Colors.white60),
+    ),
+    ],
+    ),
+    )]);
   }
 
   @override
@@ -1414,6 +1507,8 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                           tripReqError == false &&
                                           dropConfirmed == true &&
                                           lowWalletBalance == false)
+
+                                  //bottom container || bottom slide || bottom sheet
                                       ? Positioned(
                                           bottom: 0 +
                                               MediaQuery.of(context)
@@ -1429,7 +1524,7 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                             height:
                                                 (bottomChooseMethod == false &&
                                                         widget.type != 1)
-                                                    ? media.width * 1
+                                                    ? media.width * 1.1
                                                     : (bottomChooseMethod ==
                                                                 false &&
                                                             widget.type == 1)
@@ -1439,15 +1534,15 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                         topLeft:
-                                                            Radius.circular(25),
+                                                            Radius.circular(48),
                                                         topRight:
                                                             Radius.circular(
-                                                                25)),
+                                                                48)),
                                                 color: page),
                                             child: Column(
                                               children: [
                                                 SizedBox(
-                                                  height: media.width * 0.02,
+                                                  height: media.width * 0.03,
                                                 ),
                                                 SizedBox(
                                                   width: media.width * 1,
@@ -1552,11 +1647,123 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                           } else {
                                                                                             minutes[etaDetails[i]['type_id']] = '';
                                                                                           }
+
+                                                                                          //MINI BUTTON
                                                                                           return InkWell(
-                                                                                            onTap: () {
-                                                                                              setState(() {
-                                                                                                choosenVehicle = i;
-                                                                                              });
+                                                                                              onTap: () async {
+                                                                                              if ((widget.type ==
+                                                                                                  2) ||
+                                                                                                  (((rentalOption.isEmpty && (etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['total'] && etaDetails[choosenVehicle]['has_discount'] == false) || (rentalOption.isEmpty && etaDetails[choosenVehicle]['has_discount'] == true && etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['discounted_totel'])) ||
+                                                                                                      (rentalOption.isEmpty &&
+                                                                                                          etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                                                                              'wallet')) ||
+                                                                                                      ((rentalOption.isNotEmpty && (etaDetails[0]['user_wallet_balance'] >= rentalOption[choosenVehicle]['fare_amount']) && rentalOption[choosenVehicle]['has_discount'] == false) ||
+                                                                                                          (rentalOption.isNotEmpty &&
+                                                                                                              rentalOption[choosenVehicle]['has_discount'] ==
+                                                                                                                  true &&
+                                                                                                              etaDetails[0]['user_wallet_balance'] >=
+                                                                                                                  rentalOption[choosenVehicle][
+                                                                                                                  'discounted_totel']) ||
+                                                                                                          rentalOption.isNotEmpty &&
+                                                                                                              rentalOption[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                                                                                  'wallet'))) {
+                                                                                                setState(() {
+                                                                                                  _isLoading =
+                                                                                                  true;
+                                                                                                });
+                                                                                                dropStopList
+                                                                                                    .clear();
+                                                                                                dynamic result;
+                                                                                                if (choosenVehicle !=
+                                                                                                    null) {
+                                                                                                  if (widget
+                                                                                                      .type !=
+                                                                                                      1) {
+                                                                                                    if (etaDetails[
+                                                                                                    choosenVehicle]
+                                                                                                    [
+                                                                                                    'has_discount'] ==
+                                                                                                        false) {
+                                                                                                      if (addressList
+                                                                                                          .length >
+                                                                                                          2) {
+                                                                                                        for (var i =
+                                                                                                        1;
+                                                                                                        i < addressList.length;
+                                                                                                        i++) {
+                                                                                                          dropStopList.add(DropStops(
+                                                                                                              order:
+                                                                                                              i.toString(),
+                                                                                                              latitude: addressList[i].latlng.latitude,
+                                                                                                              longitude: addressList[i].latlng.longitude,
+                                                                                                              address: addressList[i].address));
+                                                                                                        }
+                                                                                                      }
+                                                                                                      result =
+                                                                                                      await createRequest();
+                                                                                                      if (result ==
+                                                                                                          'logout') {
+                                                                                                        navigateLogout();
+                                                                                                      }
+                                                                                                    } else {
+                                                                                                      if (addressList
+                                                                                                          .length >
+                                                                                                          2) {
+                                                                                                        for (var i =
+                                                                                                        1;
+                                                                                                        i < addressList.length;
+                                                                                                        i++) {
+                                                                                                          dropStopList.add(DropStops(
+                                                                                                              order:
+                                                                                                              i.toString(),
+                                                                                                              latitude: addressList[i].latlng.latitude,
+                                                                                                              longitude: addressList[i].latlng.longitude,
+                                                                                                              address: addressList[i].address));
+                                                                                                        }
+                                                                                                      }
+                                                                                                      result =
+                                                                                                      await createRequestWithPromo();
+                                                                                                      if (result ==
+                                                                                                          'logout') {
+                                                                                                        navigateLogout();
+                                                                                                      }
+                                                                                                    }
+                                                                                                  } else {
+                                                                                                    if (rentalOption[
+                                                                                                    choosenVehicle]
+                                                                                                    [
+                                                                                                    'has_discount'] ==
+                                                                                                        false) {
+                                                                                                      result =
+                                                                                                      await createRentalRequest();
+                                                                                                      if (result ==
+                                                                                                          'logout') {
+                                                                                                        navigateLogout();
+                                                                                                      }
+                                                                                                    } else {
+                                                                                                      result =
+                                                                                                      await createRentalRequestWithPromo();
+                                                                                                      if (result ==
+                                                                                                          'logout') {
+                                                                                                        navigateLogout();
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                                if (result ==
+                                                                                                    'success') {
+                                                                                                  timer();
+                                                                                                }
+                                                                                                setState(() {
+                                                                                                  _isLoading =
+                                                                                                  false;
+                                                                                                });
+                                                                                              } else {
+                                                                                                setState(() {
+                                                                                                  islowwalletbalance =
+                                                                                                  true;
+                                                                                                });
+                                                                                              }
                                                                                             },
                                                                                             child: Container(
                                                                                               padding: EdgeInsets.all(media.width * 0.02),
@@ -1564,25 +1771,40 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                               height: media.width * 0.157,
                                                                                               decoration: BoxDecoration(
                                                                                                 borderRadius: BorderRadius.circular(12),
-                                                                                                boxShadow: [
-                                                                                                  BoxShadow(color: (isDarkTheme == true) ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.2), spreadRadius: 2, blurRadius: 2)
-                                                                                                ],
-                                                                                                color: (choosenVehicle != i)
-                                                                                                    ? (isDarkTheme == true)
-                                                                                                        ? Colors.black
-                                                                                                        : Colors.white
-                                                                                                    : const Color.fromARGB(255, 174, 172, 172),
+                                                                                                // boxShadow: [
+                                                                                                //   BoxShadow(color: (isDarkTheme == true) ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.2), spreadRadius: 2, blurRadius: 2)
+                                                                                                // ],
+                                                                                                 color: Colors.white12
+
+                                                                                                // (choosenVehicle != i)
+                                                                                                //     ? (isDarkTheme == true)
+                                                                                                //         ? Colors.black
+                                                                                                //         : Colors.white
+                                                                                                //     : const Color.fromARGB(255, 174, 172, 172),
                                                                                               ),
                                                                                               child: Row(
                                                                                                 children: [
-                                                                                                  (etaDetails[i]['icon'] != null)
-                                                                                                      ? SizedBox(
-                                                                                                          width: media.width * 0.1,
-                                                                                                          child: Image.network(
-                                                                                                            etaDetails[i]['icon'],
-                                                                                                            fit: BoxFit.contain,
-                                                                                                          ))
-                                                                                                      : Container(),
+
+                                                                                                  SizedBox(
+                                                                                                    width: 8,
+                                                                                                  ),
+
+                                                                                                  //Icon of cars
+                                                                                                  
+                                                                                                  Container(
+                                                                                                    height:24,
+                                                                                                    width: 24,
+                                                                                                    child:  Image.asset('assets/images/1.png') ,
+                                                                                                  ),
+
+                                                                                                  // (etaDetails[i]['icon'] != null)
+                                                                                                  //     ? SizedBox(
+                                                                                                  //         width: media.width * 0.1,
+                                                                                                  //         child: Image.network(
+                                                                                                  //           etaDetails[i]['icon'],
+                                                                                                  //           fit: BoxFit.contain,
+                                                                                                  //         ))
+                                                                                                  //     : Container(),
                                                                                                   SizedBox(
                                                                                                     width: media.width * 0.05,
                                                                                                   ),
@@ -1594,55 +1816,61 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                                           style: GoogleFonts.notoSans(
                                                                                                               fontSize: media.width * fourteen,
                                                                                                               fontWeight: FontWeight.w600,
-                                                                                                              color: (choosenVehicle != i)
-                                                                                                                  ? (isDarkTheme == true)
-                                                                                                                      ? hintColor
-                                                                                                                      : textColor
-                                                                                                                  : Colors.black)),
-                                                                                                      Row(
-                                                                                                        children: [
-                                                                                                          Icon(
-                                                                                                            Icons.timelapse,
-                                                                                                            size: media.width * 0.04,
-                                                                                                            color: const Color(0xff8A8A8A),
-                                                                                                          ),
-                                                                                                          SizedBox(
-                                                                                                            width: media.width * 0.01,
-                                                                                                          ),
-                                                                                                          (minutes[etaDetails[i]['type_id']] != null && minutes[etaDetails[i]['type_id']] != '')
-                                                                                                              ? Text(
-                                                                                                                  minutes[etaDetails[i]['type_id']].toString(),
-                                                                                                                  style: GoogleFonts.notoSans(fontSize: media.width * twelve, color: const Color(0xff8A8A8A)),
-                                                                                                                )
-                                                                                                              : Text(
-                                                                                                                  '- -',
-                                                                                                                  style: GoogleFonts.notoSans(
-                                                                                                                      fontSize: media.width * twelve,
-                                                                                                                      color: (choosenVehicle != i)
-                                                                                                                          ? textColor.withOpacity(0.7)
-                                                                                                                          : (isDarkTheme)
-                                                                                                                              ? Colors.black
-                                                                                                                              : hintColor.withOpacity(0.4)),
-                                                                                                                ),
-                                                                                                          SizedBox(
-                                                                                                            width: media.width * 0.01,
-                                                                                                          ),
-                                                                                                          InkWell(
-                                                                                                              onTap: () {
-                                                                                                                setState(() {
-                                                                                                                  _showInfoInt = i;
-                                                                                                                  _showInfo = true;
-                                                                                                                });
-                                                                                                              },
-                                                                                                              child: Icon(
-                                                                                                                Icons.info_outline,
-                                                                                                                size: media.width * 0.04,
-                                                                                                                color: const Color(0xff8A8A8A),
-                                                                                                              ))
-                                                                                                        ],
+                                                                                                              color: Colors.white,
+                                                                                                              // (choosenVehicle != i)
+                                                                                                              //     ? (isDarkTheme == true)
+                                                                                                              //         ? hintColor
+                                                                                                              //         : textColor
+                                                                                                              //     : Colors.white
+                                                                                                          )
                                                                                                       ),
+                                                                                                      // Row(
+                                                                                                      //   children: [
+                                                                                                      //     Icon(
+                                                                                                      //       Icons.timelapse,
+                                                                                                      //       size: media.width * 0.04,
+                                                                                                      //       color: const Color(0xff8A8A8A),
+                                                                                                      //     ),
+                                                                                                      //     SizedBox(
+                                                                                                      //       width: media.width * 0.01,
+                                                                                                      //     ),
+                                                                                                      //     (minutes[etaDetails[i]['type_id']] != null && minutes[etaDetails[i]['type_id']] != '')
+                                                                                                      //         ? Text(
+                                                                                                      //             minutes[etaDetails[i]['type_id']].toString(),
+                                                                                                      //             style: GoogleFonts.notoSans(fontSize: media.width * twelve, color: const Color(0xff8A8A8A)),
+                                                                                                      //           )
+                                                                                                      //         : Text(
+                                                                                                      //             '- -',
+                                                                                                      //             style: GoogleFonts.notoSans(
+                                                                                                      //                 fontSize: media.width * twelve,
+                                                                                                      //                 color: (choosenVehicle != i)
+                                                                                                      //                     ? textColor.withOpacity(0.7)
+                                                                                                      //                     : (isDarkTheme)
+                                                                                                      //                         ? Colors.black
+                                                                                                      //                         : hintColor.withOpacity(0.4)),
+                                                                                                      //           ),
+                                                                                                      //     SizedBox(
+                                                                                                      //       width: media.width * 0.01,
+                                                                                                      //     ),
+                                                                                                      //     InkWell(
+                                                                                                      //         onTap: () {
+                                                                                                      //           setState(() {
+                                                                                                      //             _showInfoInt = i;
+                                                                                                      //             _showInfo = true;
+                                                                                                      //           });
+                                                                                                      //         },
+                                                                                                      //         child: Icon(
+                                                                                                      //           Icons.info_outline,
+                                                                                                      //           size: media.width * 0.04,
+                                                                                                      //           color: const Color(0xff8A8A8A),
+                                                                                                      //         ))
+                                                                                                      //   ],
+                                                                                                      // ),
                                                                                                     ],
                                                                                                   ),
+
+                                                                                                  // Price of rides
+
                                                                                                   (widget.type != 2)
                                                                                                       ? Expanded(
                                                                                                           child: (etaDetails[i]['has_discount'] != true)
@@ -1650,21 +1878,24 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                                                                                   children: [
                                                                                                                     Text(
-                                                                                                                      // '${(isOutStation && daysDifferenceRoundedUp == 0) ?
-                                                                                                                      etaDetails[i]['total'].toStringAsFixed(2)
-                                                                                                                          // : (daysDifferenceRoundedUp != 0) ? (double.parse(etaDetails[i]['total'].toString()) * daysDifferenceRoundedUp).toStringAsFixed(2) : etaDetails[i]['total'].toStringAsFixed(2)} ${etaDetails[i]['currency']}'
+                                                                                                                          etaDetails[i]['currency']
+                                                                                                                      + ' '  +
+                                                                                                          // '${(isOutStation && daysDifferenceRoundedUp == 0) ?
+                                                                                                          etaDetails[i]['total'].toStringAsFixed(2)
+                                                                                                          // : (daysDifferenceRoundedUp != 0) ? (double.parse(etaDetails[i]['total'].toString()) * daysDifferenceRoundedUp).toStringAsFixed(2) : etaDetails[i]['total'].toStringAsFixed(2)} ${etaDetails[i]['currency']}'
 
-                                                                                                                          // daysDifferenceRoundedUp    etaDetails[i]['total'].toStringAsFixed(2) +
-                                                                                                                          +
-                                                                                                                          etaDetails[i]['currency'],
+                                                                                                          // daysDifferenceRoundedUp    etaDetails[i]['total'].toStringAsFixed(2)
+                                                                                                          ,
                                                                                                                       style: GoogleFonts.notoSans(
                                                                                                                           fontSize: media.width * fourteen,
                                                                                                                           fontWeight: FontWeight.w600,
-                                                                                                                          color: (choosenVehicle != i)
-                                                                                                                              ? (isDarkTheme == true)
-                                                                                                                                  ? Colors.white
-                                                                                                                                  : textColor
-                                                                                                                              : Colors.black),
+                                                                                                                          color: Colors.white,
+                                                                                                                          // (choosenVehicle != i)
+                                                                                                                          //     ? (isDarkTheme == true)
+                                                                                                                          //         ? Colors.white
+                                                                                                                          //         : textColor
+                                                                                                                          //     : Colors.black
+                                                                                                                      ),
                                                                                                                     ),
                                                                                                                   ],
                                                                                                                 )
@@ -1713,6 +1944,180 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                               })
                                                                               .values
                                                                               .toList(),
+                                                                        ),
+
+                                                                        //pro rider
+                                                                        InkWell(
+                                                                          onTap: () async {
+
+                                                                            setState(() {
+                                                                              pro =1;
+                                                                            });
+                                                                            if (pro==1 &&( widget.type ==
+                                                                                2) ||
+                                                                                (((rentalOption.isEmpty && (etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['total'] && etaDetails[choosenVehicle]['has_discount'] == false) || (rentalOption.isEmpty && etaDetails[choosenVehicle]['has_discount'] == true && etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['discounted_totel'])) ||
+                                                                                    (rentalOption.isEmpty &&
+                                                                                        etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                                                            'wallet')) ||
+                                                                                    ((rentalOption.isNotEmpty && (etaDetails[0]['user_wallet_balance'] >= rentalOption[choosenVehicle]['fare_amount']) && rentalOption[choosenVehicle]['has_discount'] == false) ||
+                                                                                        (rentalOption.isNotEmpty &&
+                                                                                            rentalOption[choosenVehicle]['has_discount'] ==
+                                                                                                true &&
+                                                                                            etaDetails[0]['user_wallet_balance'] >=
+                                                                                                rentalOption[choosenVehicle][
+                                                                                                'discounted_totel']) ||
+                                                                                        rentalOption.isNotEmpty &&
+                                                                                            rentalOption[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                                                                'wallet'))) {
+                                                                              setState(() {
+                                                                                _isLoading =
+                                                                                true;
+                                                                              });
+                                                                              dropStopList
+                                                                                  .clear();
+                                                                              dynamic result;
+                                                                              if (choosenVehicle !=
+                                                                                  null) {
+                                                                                if (widget
+                                                                                    .type !=
+                                                                                    1) {
+                                                                                  if (etaDetails[
+                                                                                  choosenVehicle]
+                                                                                  [
+                                                                                  'has_discount'] ==
+                                                                                      false) {
+                                                                                    if (addressList
+                                                                                        .length >
+                                                                                        2) {
+                                                                                      for (var i =
+                                                                                      1;
+                                                                                      i < addressList.length;
+                                                                                      i++) {
+                                                                                        dropStopList.add(DropStops(
+                                                                                            order:
+                                                                                            i.toString(),
+                                                                                            latitude: addressList[i].latlng.latitude,
+                                                                                            longitude: addressList[i].latlng.longitude,
+                                                                                            address: addressList[i].address));
+                                                                                      }
+                                                                                    }
+                                                                                    result =
+                                                                                    await createRequest();
+                                                                                    if (result ==
+                                                                                        'logout') {
+                                                                                      navigateLogout();
+                                                                                    }
+                                                                                  } else {
+                                                                                    if (addressList
+                                                                                        .length >
+                                                                                        2) {
+                                                                                      for (var i =
+                                                                                      1;
+                                                                                      i < addressList.length;
+                                                                                      i++) {
+                                                                                        dropStopList.add(DropStops(
+                                                                                            order:
+                                                                                            i.toString(),
+                                                                                            latitude: addressList[i].latlng.latitude,
+                                                                                            longitude: addressList[i].latlng.longitude,
+                                                                                            address: addressList[i].address));
+                                                                                      }
+                                                                                    }
+                                                                                    result =
+                                                                                    await createRequestWithPromo();
+                                                                                    if (result ==
+                                                                                        'logout') {
+                                                                                      navigateLogout();
+                                                                                    }
+                                                                                  }
+                                                                                } else {
+                                                                                  if (rentalOption[
+                                                                                  choosenVehicle]
+                                                                                  [
+                                                                                  'has_discount'] ==
+                                                                                      false) {
+                                                                                    result =
+                                                                                    await createRentalRequest();
+                                                                                    if (result ==
+                                                                                        'logout') {
+                                                                                      navigateLogout();
+                                                                                    }
+                                                                                  } else {
+                                                                                    result =
+                                                                                    await createRentalRequestWithPromo();
+                                                                                    if (result ==
+                                                                                        'logout') {
+                                                                                      navigateLogout();
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                              if (result ==
+                                                                                  'success') {
+                                                                                timer();
+                                                                              }
+                                                                              setState(() {
+                                                                                _isLoading =
+                                                                                false;
+                                                                              });
+                                                                            } else {
+                                                                              setState(() {
+                                                                                islowwalletbalance =
+                                                                                true;
+                                                                              });
+                                                                            }
+                                                                          },
+                                                                          child: Container(
+                                                                            padding: EdgeInsets.all(media.width * 0.02),
+                                                                            margin: EdgeInsets.only(top: 10, left: media.width * 0.05, right: media.width * 0.05),
+                                                                            height: media.width * 0.157,
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(12),
+                                                                              boxShadow: [
+                                                                                BoxShadow(color: (isDarkTheme == true) ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.21), spreadRadius: 1.5, blurRadius: 1.5)
+                                                                              ],
+                                                                              color: Colors.black38,
+                                                                            ),
+                                                                            child: Row(
+                                                                              children: [
+                                                                          
+                                                                                SizedBox(
+                                                                                  width: media.width * 0.02,
+                                                                                ),
+                                                                          
+                                                                                SizedBox(
+                                                                                  height:24,
+                                                                                  width: 24,
+                                                                                  child: Image.asset('assets/images/crown.png'),
+                                                                                ),
+                                                                          
+                                                                                SizedBox(
+                                                                                  width: media.width * 0.05,
+                                                                                ),
+                                                                          
+                                                                                Text('Pro Booking',
+                                                                                    style:GoogleFonts.notoSans(
+                                                                                        fontSize: media.width * fourteen,
+                                                                                        fontWeight: FontWeight.w600,
+                                                                                        color: Colors.white
+                                                                                    )),
+                                                                          
+                                                                                //  SizedBox(
+                                                                                //      width: media
+                                                                                //          .width *
+                                                                                //              .35,),
+                                                                                //
+                                                                                // Text('₹ 180',
+                                                                                //     style:GoogleFonts.notoSans(
+                                                                                //         fontSize: media.width * fourteen,
+                                                                                //         fontWeight: FontWeight.w600,
+                                                                                //         color: Colors.white
+                                                                                //     )),
+                                                                          
+                                                                          
+                                                                              ],
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ],
                                                                     ))),
@@ -2001,6 +2406,15 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                 )),
                                                           )
                                                         : Container(),
+
+                                                SizedBox(
+                                                  height: media.width * 0.02,
+                                                ),
+
+
+                                                SizedBox(
+                                                  height: media.width * 0.02,
+                                                ),
                                                 SizedBox(
                                                   height: media.width * 0.02,
                                                 ),
@@ -2017,6 +2431,8 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                             : const Color(
                                                                 0xffF3F3F3),
                                                         child:
+
+                                                            //payment section
                                                             SingleChildScrollView(
                                                           scrollDirection:
                                                               Axis.horizontal,
@@ -2050,7 +2466,8 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                               ? media.width * 0.45
                                                                               : media.width * 0.3,
                                                                           decoration:
-                                                                              BoxDecoration(border: Border(right: BorderSide(color: (i < etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList().length - 1) ? const Color(0xffE7EDEF) : Colors.transparent, width: 1.1))),
+                                                                              BoxDecoration(border: Border(right: BorderSide(color: (i < etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList().length - 1) ? const Color(
+                                                                                  0xffffffff).withOpacity(.24) : Colors.transparent, width: 1.1))),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
@@ -2063,9 +2480,10 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                       height: media.width * 0.037,
                                                                                       fit: BoxFit.contain,
                                                                                       color: (payingVia == i)
-                                                                                          ? const Color(0xffFF0000)
+                                                                                          ? const Color(
+                                                                                          0xffffffff)
                                                                                           : (isDarkTheme == true)
-                                                                                              ? Colors.white
+                                                                                              ? Colors.white24
                                                                                               : Colors.black,
                                                                                     )
                                                                                   : (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[i] == 'wallet')
@@ -2074,9 +2492,10 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                           width: media.width * 0.037,
                                                                                           height: media.width * 0.037,
                                                                                           color: (payingVia == i)
-                                                                                              ? const Color(0xffFF0000)
+                                                                                              ? const Color(
+                                                                                              0xffffffff)
                                                                                               : (isDarkTheme == true)
-                                                                                                  ? Colors.white
+                                                                                                  ? Colors.white24
                                                                                                   : Colors.black,
                                                                                           fit: BoxFit.contain,
                                                                                         )
@@ -2086,9 +2505,10 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                               width: media.width * 0.037,
                                                                                               height: media.width * 0.037,
                                                                                               color: (payingVia == i)
-                                                                                                  ? const Color(0xffFF0000)
+                                                                                                  ? const Color(
+                                                                                                  0xffffffff)
                                                                                                   : (isDarkTheme == true)
-                                                                                                      ? Colors.white
+                                                                                                      ? Colors.white24
                                                                                                       : Colors.black,
                                                                                               fit: BoxFit.contain,
                                                                                             )
@@ -2098,9 +2518,10 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                                   width: media.width * 0.037,
                                                                                                   height: media.width * 0.037,
                                                                                                   color: (payingVia == i)
-                                                                                                      ? const Color(0xffFF0000)
+                                                                                                      ? const Color(
+                                                                                                      0xffffffff)
                                                                                                       : (isDarkTheme == true)
-                                                                                                          ? Colors.white
+                                                                                                          ? Colors.white24
                                                                                                           : Colors.black,
                                                                                                   fit: BoxFit.contain,
                                                                                                 )
@@ -2112,9 +2533,10 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                                 text: etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[i],
                                                                                 size: media.width * fourteen,
                                                                                 color: (payingVia == i)
-                                                                                    ? const Color(0xffFF0000)
+                                                                                    ? const Color(
+                                                                                    0xffffffff)
                                                                                     : (isDarkTheme == true)
-                                                                                        ? Colors.white
+                                                                                        ? Colors.white24
                                                                                         : Colors.black,
                                                                               )
                                                                             ],
@@ -2224,395 +2646,395 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                             ),
                                                           )
                                                         : Container(),
-                                                (choosenVehicle != null &&
-                                                        widget.type != 2)
-                                                    ? InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            _addCoupon = true;
-                                                          });
-                                                        },
-                                                        child:
-                                                            (_addCoupon ==
-                                                                    false)
-                                                                ? Container(
-                                                                    height: media
-                                                                            .width *
-                                                                        0.106,
-                                                                    width: media
-                                                                            .width *
-                                                                        0.9,
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                            border:
-                                                                                Border(bottom: BorderSide(color: Color(0xffF3F3F3), width: 1.1))),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: [
-                                                                        MyText(
-                                                                          text: languages[choosenLanguage]
-                                                                              [
-                                                                              'text_coupons'],
-                                                                          size: media.width *
-                                                                              fourteen,
-                                                                          fontweight:
-                                                                              FontWeight.w600,
-                                                                        ),
-                                                                        Icon(
-                                                                          Icons
-                                                                              .arrow_forward_ios,
-                                                                          color:
-                                                                              textColor,
-                                                                          size: media.width *
-                                                                              0.04,
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  )
-                                                                : Container(
-                                                                    padding: EdgeInsets.only(
-                                                                        top: media.width *
-                                                                            0.02),
-                                                                    height: media
-                                                                            .width *
-                                                                        0.106,
-                                                                    width: media
-                                                                            .width *
-                                                                        0.9,
-                                                                    color: (isDarkTheme ==
-                                                                            true)
-                                                                        ? Colors
-                                                                            .black
-                                                                        : const Color(
-                                                                            0xffF3F3F3),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceEvenly,
-                                                                      children: [
-                                                                        SizedBox(
-                                                                          width:
-                                                                              media.width * 0.25,
-                                                                          child:
-                                                                              Row(
-                                                                            children: [
-                                                                              MyText(text: languages[choosenLanguage]['text_coupons'], size: media.width * fourteen, color: textColor),
-                                                                              Icon(
-                                                                                Icons.card_giftcard_outlined,
-                                                                                size: media.width * fourteen,
-                                                                                color: (isDarkTheme == true) ? const Color(0xFFFF0000) : buttonColor,
-                                                                              )
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                        (promoStatus !=
-                                                                                1)
-                                                                            ? Container(
-                                                                                width: media.width * 0.25,
-                                                                                height: media.width * 0.090,
-                                                                                padding: EdgeInsets.all(media.width * 0.010),
-                                                                                decoration: BoxDecoration(color: page, border: Border.all(color: textColor.withOpacity(0.4)), borderRadius: BorderRadius.circular(media.width * 0.02)),
-                                                                                child: TextField(
-                                                                                  controller: promoKey,
-                                                                                  decoration: const InputDecoration(border: InputBorder.none),
-                                                                                  style: GoogleFonts.notoSans(color: textColor),
-                                                                                  onChanged: (val) {
-                                                                                    promoCode = val;
-                                                                                  },
-                                                                                ),
-                                                                              )
-                                                                            : const Icon(
-                                                                                Icons.done,
-                                                                                color: Colors.green,
-                                                                              ),
-                                                                        SizedBox(
-                                                                          width:
-                                                                              media.width * 0.25,
-                                                                          height:
-                                                                              media.width * 0.090,
-                                                                          child:
-                                                                              Button(
-                                                                            text: (promoStatus != 1)
-                                                                                ? languages[choosenLanguage]['text_apply']
-                                                                                : languages[choosenLanguage]['text_remove'],
-                                                                            fontweight:
-                                                                                FontWeight.w500,
-                                                                            onTap:
-                                                                                () async {
-                                                                              FocusScope.of(context).unfocus();
-                                                                              setState(() {
-                                                                                _isLoading = true;
-                                                                              });
-                                                                              if (promoStatus != 1) {
-                                                                                setState(() {
-                                                                                  promoStatus = null;
-                                                                                });
-                                                                                if (widget.type != 1 && promoKey.text.isNotEmpty) {
-                                                                                  await etaRequestWithPromo();
-                                                                                } else if (widget.type == 1 && promoKey.text.isNotEmpty) {
-                                                                                  await rentalRequestWithPromo();
-                                                                                }
-                                                                              } else {
-                                                                                promoKey.text = '';
-                                                                                promoStatus = null;
-                                                                                if (widget.type != 1) {
-                                                                                  await etaRequest();
-                                                                                } else if (widget.type == 1) {
-                                                                                  await rentalEta();
-                                                                                }
-                                                                              }
-                                                                              setState(() {
-                                                                                _isLoading = false;
-                                                                              });
-                                                                            },
-                                                                            color:
-                                                                                const Color(0xffFF0000),
-                                                                            textcolor:
-                                                                                Colors.black,
-                                                                            borderRadius:
-                                                                                12.0,
-                                                                          ),
-                                                                        ),
-                                                                        InkWell(
-                                                                            onTap:
-                                                                                () {
-                                                                              if (widget.type == 1 ? (rentalOption[choosenVehicle]['has_discount'] == true) : etaDetails[choosenVehicle]['has_discount'] == true) {
-                                                                                setState(() {
-                                                                                  promoStatus = 1;
-                                                                                  _addCoupon = false;
-                                                                                  // promoKey.clear();
-                                                                                });
-                                                                              } else {
-                                                                                setState(() {
-                                                                                  promoStatus = null;
-                                                                                  _addCoupon = false;
-                                                                                  promoKey.clear();
-                                                                                });
-                                                                              }
-                                                                            },
-                                                                            child:
-                                                                                const Icon(
-                                                                              Icons.cancel,
-                                                                              color: Color(0xffFF0000),
-                                                                            ))
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                      )
-                                                    : Container(),
-                                                if (promoStatus != null &&
-                                                    promoStatus == 2)
-                                                  Container(
-                                                    width: media.width * 0.9,
-                                                    padding: EdgeInsets.only(
-                                                        top: media.width *
-                                                            0.025),
-                                                    child: MyText(
-                                                      text: languages[
-                                                              choosenLanguage][
-                                                          'text_promorejected'],
-                                                      size:
-                                                          media.width * twelve,
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                (choosenVehicle != null)
-                                                    ? SizedBox(
-                                                        height:
-                                                            media.width * 0.025,
-                                                      )
-                                                    : Container(),
-                                                SizedBox(
-                                                  width: media.width * 0.9,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      (userDetails[
-                                                                  'show_ride_later_feature'] ==
-                                                              true)
-                                                          ? Button(
-                                                              color: page,
-                                                              borcolor:
-                                                                  buttonColor,
-                                                              textcolor:
-                                                                  buttonColor,
-                                                              width:
-                                                                  media.width *
-                                                                      0.42,
-                                                              onTap: () async {
-                                                                if (((rentalOption.isEmpty && (etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['total'] && etaDetails[choosenVehicle]['has_discount'] == false) || (rentalOption.isEmpty && etaDetails[choosenVehicle]['has_discount'] == true && etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['discounted_totel'])) ||
-                                                                        (rentalOption.isEmpty &&
-                                                                            etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
-                                                                                'wallet')) ||
-                                                                    ((rentalOption.isNotEmpty && (etaDetails[0]['user_wallet_balance'] >= rentalOption[choosenVehicle]['fare_amount']) && rentalOption[choosenVehicle]['has_discount'] == false) ||
-                                                                        (rentalOption.isNotEmpty &&
-                                                                            rentalOption[choosenVehicle]['has_discount'] ==
-                                                                                true &&
-                                                                            etaDetails[0]['user_wallet_balance'] >=
-                                                                                rentalOption[choosenVehicle][
-                                                                                    'discounted_totel']) ||
-                                                                        rentalOption.isNotEmpty &&
-                                                                            rentalOption[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
-                                                                                'wallet')) {
-                                                                  if (choosenVehicle !=
-                                                                      null) {
-                                                                    setState(
-                                                                        () {
-                                                                      choosenDateTime = DateTime
-                                                                              .now()
-                                                                          .add(Duration(
-                                                                              minutes: int.parse(userDetails['user_can_make_a_ride_after_x_miniutes'])));
-                                                                      _dateTimePicker =
-                                                                          true;
-                                                                    });
-                                                                  }
-                                                                } else {
-                                                                  setState(() {
-                                                                    islowwalletbalance =
-                                                                        true;
-                                                                  });
-                                                                }
-                                                              },
-                                                              text: languages[
-                                                                      choosenLanguage]
-                                                                  [
-                                                                  'text_ridelater'])
-                                                          : Container(),
-                                                      Button(
-                                                          width: ((userDetails[
-                                                                      'show_ride_later_feature'] ==
-                                                                  true))
-                                                              ? media.width *
-                                                                  0.42
-                                                              : media.width *
-                                                                  0.89,
-                                                          color: buttonColor,
-                                                          onTap: () async {
-                                                            if ((widget.type ==
-                                                                    2) ||
-                                                                (((rentalOption.isEmpty && (etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['total'] && etaDetails[choosenVehicle]['has_discount'] == false) || (rentalOption.isEmpty && etaDetails[choosenVehicle]['has_discount'] == true && etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['discounted_totel'])) ||
-                                                                        (rentalOption.isEmpty &&
-                                                                            etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
-                                                                                'wallet')) ||
-                                                                    ((rentalOption.isNotEmpty && (etaDetails[0]['user_wallet_balance'] >= rentalOption[choosenVehicle]['fare_amount']) && rentalOption[choosenVehicle]['has_discount'] == false) ||
-                                                                        (rentalOption.isNotEmpty &&
-                                                                            rentalOption[choosenVehicle]['has_discount'] ==
-                                                                                true &&
-                                                                            etaDetails[0]['user_wallet_balance'] >=
-                                                                                rentalOption[choosenVehicle][
-                                                                                    'discounted_totel']) ||
-                                                                        rentalOption.isNotEmpty &&
-                                                                            rentalOption[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
-                                                                                'wallet'))) {
-                                                              setState(() {
-                                                                _isLoading =
-                                                                    true;
-                                                              });
-                                                              dropStopList
-                                                                  .clear();
-                                                              dynamic result;
-                                                              if (choosenVehicle !=
-                                                                  null) {
-                                                                if (widget
-                                                                        .type !=
-                                                                    1) {
-                                                                  if (etaDetails[
-                                                                              choosenVehicle]
-                                                                          [
-                                                                          'has_discount'] ==
-                                                                      false) {
-                                                                    if (addressList
-                                                                            .length >
-                                                                        2) {
-                                                                      for (var i =
-                                                                              1;
-                                                                          i < addressList.length;
-                                                                          i++) {
-                                                                        dropStopList.add(DropStops(
-                                                                            order:
-                                                                                i.toString(),
-                                                                            latitude: addressList[i].latlng.latitude,
-                                                                            longitude: addressList[i].latlng.longitude,
-                                                                            address: addressList[i].address));
-                                                                      }
-                                                                    }
-                                                                    result =
-                                                                        await createRequest();
-                                                                    if (result ==
-                                                                        'logout') {
-                                                                      navigateLogout();
-                                                                    }
-                                                                  } else {
-                                                                    if (addressList
-                                                                            .length >
-                                                                        2) {
-                                                                      for (var i =
-                                                                              1;
-                                                                          i < addressList.length;
-                                                                          i++) {
-                                                                        dropStopList.add(DropStops(
-                                                                            order:
-                                                                                i.toString(),
-                                                                            latitude: addressList[i].latlng.latitude,
-                                                                            longitude: addressList[i].latlng.longitude,
-                                                                            address: addressList[i].address));
-                                                                      }
-                                                                    }
-                                                                    result =
-                                                                        await createRequestWithPromo();
-                                                                    if (result ==
-                                                                        'logout') {
-                                                                      navigateLogout();
-                                                                    }
-                                                                  }
-                                                                } else {
-                                                                  if (rentalOption[
-                                                                              choosenVehicle]
-                                                                          [
-                                                                          'has_discount'] ==
-                                                                      false) {
-                                                                    result =
-                                                                        await createRentalRequest();
-                                                                    if (result ==
-                                                                        'logout') {
-                                                                      navigateLogout();
-                                                                    }
-                                                                  } else {
-                                                                    result =
-                                                                        await createRentalRequestWithPromo();
-                                                                    if (result ==
-                                                                        'logout') {
-                                                                      navigateLogout();
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                              if (result ==
-                                                                  'success') {
-                                                                timer();
-                                                              }
-                                                              setState(() {
-                                                                _isLoading =
-                                                                    false;
-                                                              });
-                                                            } else {
-                                                              setState(() {
-                                                                islowwalletbalance =
-                                                                    true;
-                                                              });
-                                                            }
-                                                          },
-                                                          text: languages[
-                                                                  choosenLanguage]
-                                                              [
-                                                              'text_book_now']),
-                                                    ],
-                                                  ),
-                                                ),
+                                                // (choosenVehicle != null &&
+                                                //         widget.type != 2)
+                                                    // ? InkWell(
+                                                    //     onTap: () {
+                                                    //       setState(() {
+                                                    //         _addCoupon = true;
+                                                    //       });
+                                                    //     },
+                                                    //     child:
+                                                    //         (_addCoupon ==
+                                                    //                 false)
+                                                    //             ? Container(
+                                                    //                 height: media
+                                                    //                         .width *
+                                                    //                     0.106,
+                                                    //                 width: media
+                                                    //                         .width *
+                                                    //                     0.9,
+                                                    //                 decoration:
+                                                    //                     const BoxDecoration(
+                                                    //                         border:
+                                                    //                             Border(bottom: BorderSide(color: Color(0xffF3F3F3), width: 1.1))),
+                                                    //                 child: Row(
+                                                    //                   mainAxisAlignment:
+                                                    //                       MainAxisAlignment
+                                                    //                           .spaceBetween,
+                                                    //                   children: [
+                                                    //                     MyText(
+                                                    //                       text: languages[choosenLanguage]
+                                                    //                           [
+                                                    //                           'text_coupons'],
+                                                    //                       size: media.width *
+                                                    //                           fourteen,
+                                                    //                       fontweight:
+                                                    //                           FontWeight.w600,
+                                                    //                     ),
+                                                    //                     Icon(
+                                                    //                       Icons
+                                                    //                           .arrow_forward_ios,
+                                                    //                       color:
+                                                    //                           textColor,
+                                                    //                       size: media.width *
+                                                    //                           0.04,
+                                                    //                     )
+                                                    //                   ],
+                                                    //                 ),
+                                                    //               )
+                                                    //             : Container(
+                                                    //                 padding: EdgeInsets.only(
+                                                    //                     top: media.width *
+                                                    //                         0.02),
+                                                    //                 height: media
+                                                    //                         .width *
+                                                    //                     0.106,
+                                                    //                 width: media
+                                                    //                         .width *
+                                                    //                     0.9,
+                                                    //                 color: (isDarkTheme ==
+                                                    //                         true)
+                                                    //                     ? Colors
+                                                    //                         .black
+                                                    //                     : const Color(
+                                                    //                         0xffF3F3F3),
+                                                    //                 child: Row(
+                                                    //                   mainAxisAlignment:
+                                                    //                       MainAxisAlignment
+                                                    //                           .spaceEvenly,
+                                                    //                   children: [
+                                                    //                     SizedBox(
+                                                    //                       width:
+                                                    //                           media.width * 0.25,
+                                                    //                       child:
+                                                    //                           Row(
+                                                    //                         children: [
+                                                    //                           MyText(text: languages[choosenLanguage]['text_coupons'], size: media.width * fourteen, color: textColor),
+                                                    //                           Icon(
+                                                    //                             Icons.card_giftcard_outlined,
+                                                    //                             size: media.width * fourteen,
+                                                    //                             color: (isDarkTheme == true) ? const Color(0xFFFF0000) : buttonColor,
+                                                    //                           )
+                                                    //                         ],
+                                                    //                       ),
+                                                    //                     ),
+                                                    //                     (promoStatus !=
+                                                    //                             1)
+                                                    //                         ? Container(
+                                                    //                             width: media.width * 0.25,
+                                                    //                             height: media.width * 0.090,
+                                                    //                             padding: EdgeInsets.all(media.width * 0.010),
+                                                    //                             decoration: BoxDecoration(color: page, border: Border.all(color: textColor.withOpacity(0.4)), borderRadius: BorderRadius.circular(media.width * 0.02)),
+                                                    //                             child: TextField(
+                                                    //                               controller: promoKey,
+                                                    //                               decoration: const InputDecoration(border: InputBorder.none),
+                                                    //                               style: GoogleFonts.notoSans(color: textColor),
+                                                    //                               onChanged: (val) {
+                                                    //                                 promoCode = val;
+                                                    //                               },
+                                                    //                             ),
+                                                    //                           )
+                                                    //                         : const Icon(
+                                                    //                             Icons.done,
+                                                    //                             color: Colors.green,
+                                                    //                           ),
+                                                    //                     SizedBox(
+                                                    //                       width:
+                                                    //                           media.width * 0.25,
+                                                    //                       height:
+                                                    //                           media.width * 0.090,
+                                                    //                       child:
+                                                    //                           Button(
+                                                    //                         text: (promoStatus != 1)
+                                                    //                             ? languages[choosenLanguage]['text_apply']
+                                                    //                             : languages[choosenLanguage]['text_remove'],
+                                                    //                         fontweight:
+                                                    //                             FontWeight.w500,
+                                                    //                         onTap:
+                                                    //                             () async {
+                                                    //                           FocusScope.of(context).unfocus();
+                                                    //                           setState(() {
+                                                    //                             _isLoading = true;
+                                                    //                           });
+                                                    //                           if (promoStatus != 1) {
+                                                    //                             setState(() {
+                                                    //                               promoStatus = null;
+                                                    //                             });
+                                                    //                             if (widget.type != 1 && promoKey.text.isNotEmpty) {
+                                                    //                               await etaRequestWithPromo();
+                                                    //                             } else if (widget.type == 1 && promoKey.text.isNotEmpty) {
+                                                    //                               await rentalRequestWithPromo();
+                                                    //                             }
+                                                    //                           } else {
+                                                    //                             promoKey.text = '';
+                                                    //                             promoStatus = null;
+                                                    //                             if (widget.type != 1) {
+                                                    //                               await etaRequest();
+                                                    //                             } else if (widget.type == 1) {
+                                                    //                               await rentalEta();
+                                                    //                             }
+                                                    //                           }
+                                                    //                           setState(() {
+                                                    //                             _isLoading = false;
+                                                    //                           });
+                                                    //                         },
+                                                    //                         color:
+                                                    //                             const Color(0xffFF0000),
+                                                    //                         textcolor:
+                                                    //                             Colors.black,
+                                                    //                         borderRadius:
+                                                    //                             12.0,
+                                                    //                       ),
+                                                    //                     ),
+                                                    //                     InkWell(
+                                                    //                         onTap:
+                                                    //                             () {
+                                                    //                           if (widget.type == 1 ? (rentalOption[choosenVehicle]['has_discount'] == true) : etaDetails[choosenVehicle]['has_discount'] == true) {
+                                                    //                             setState(() {
+                                                    //                               promoStatus = 1;
+                                                    //                               _addCoupon = false;
+                                                    //                               // promoKey.clear();
+                                                    //                             });
+                                                    //                           } else {
+                                                    //                             setState(() {
+                                                    //                               promoStatus = null;
+                                                    //                               _addCoupon = false;
+                                                    //                               promoKey.clear();
+                                                    //                             });
+                                                    //                           }
+                                                    //                         },
+                                                    //                         child:
+                                                    //                             const Icon(
+                                                    //                           Icons.cancel,
+                                                    //                           color: Color(0xffFF0000),
+                                                    //                         ))
+                                                    //                   ],
+                                                    //                 ),
+                                                    //               ),
+                                                    //   )
+                                                //    // : Container(),
+                                                // if (promoStatus != null &&
+                                                //     promoStatus == 2)
+                                                //   Container(
+                                                //     width: media.width * 0.9,
+                                                //     padding: EdgeInsets.only(
+                                                //         top: media.width *
+                                                //             0.025),
+                                                //     child: MyText(
+                                                //       text: languages[
+                                                //               choosenLanguage][
+                                                //           'text_promorejected'],
+                                                //       size:
+                                                //           media.width * twelve,
+                                                //       color: Colors.red,
+                                                //     ),
+                                                //   ),
+                                                // (choosenVehicle != null)
+                                                //     ? SizedBox(
+                                                //         height:
+                                                //             media.width * 0.025,
+                                                //       )
+                                                //     : Container(),
+                                                // SizedBox(
+                                                //   width: media.width * 0.9,
+                                                  // child: Row(
+                                                  //   mainAxisAlignment:
+                                                  //       MainAxisAlignment
+                                                  //           .spaceBetween,
+                                                  //   children: [
+                                                  //     (userDetails[
+                                                  //                 'show_ride_later_feature'] ==
+                                                  //             true)
+                                                  //         ? Button(
+                                                  //             color: page,
+                                                  //             borcolor:
+                                                  //                 buttonColor,
+                                                  //             textcolor:
+                                                  //                 buttonColor,
+                                                  //             width:
+                                                  //                 media.width *
+                                                  //                     0.42,
+                                                  //             onTap: () async {
+                                                  //               if (((rentalOption.isEmpty && (etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['total'] && etaDetails[choosenVehicle]['has_discount'] == false) || (rentalOption.isEmpty && etaDetails[choosenVehicle]['has_discount'] == true && etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['discounted_totel'])) ||
+                                                  //                       (rentalOption.isEmpty &&
+                                                  //                           etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                  //                               'wallet')) ||
+                                                  //                   ((rentalOption.isNotEmpty && (etaDetails[0]['user_wallet_balance'] >= rentalOption[choosenVehicle]['fare_amount']) && rentalOption[choosenVehicle]['has_discount'] == false) ||
+                                                  //                       (rentalOption.isNotEmpty &&
+                                                  //                           rentalOption[choosenVehicle]['has_discount'] ==
+                                                  //                               true &&
+                                                  //                           etaDetails[0]['user_wallet_balance'] >=
+                                                  //                               rentalOption[choosenVehicle][
+                                                  //                                   'discounted_totel']) ||
+                                                  //                       rentalOption.isNotEmpty &&
+                                                  //                           rentalOption[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                  //                               'wallet')) {
+                                                  //                 if (choosenVehicle !=
+                                                  //                     null) {
+                                                  //                   setState(
+                                                  //                       () {
+                                                  //                     choosenDateTime = DateTime
+                                                  //                             .now()
+                                                  //                         .add(Duration(
+                                                  //                             minutes: int.parse(userDetails['user_can_make_a_ride_after_x_miniutes'])));
+                                                  //                     _dateTimePicker =
+                                                  //                         true;
+                                                  //                   });
+                                                  //                 }
+                                                  //               } else {
+                                                  //                 setState(() {
+                                                  //                   islowwalletbalance =
+                                                  //                       true;
+                                                  //                 });
+                                                  //               }
+                                                  //             },
+                                                  //             text: languages[
+                                                  //                     choosenLanguage]
+                                                  //                 [
+                                                  //                 'text_ridelater'])
+                                                  //         : Container(),
+                                                  //     Button(
+                                                  //         width: ((userDetails[
+                                                  //                     'show_ride_later_feature'] ==
+                                                  //                 true))
+                                                  //             ? media.width *
+                                                  //                 0.42
+                                                  //             : media.width *
+                                                  //                 0.89,
+                                                  //         color: buttonColor,
+                                                  //         onTap: () async {
+                                                  //           if ((widget.type ==
+                                                  //                   2) ||
+                                                  //               (((rentalOption.isEmpty && (etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['total'] && etaDetails[choosenVehicle]['has_discount'] == false) || (rentalOption.isEmpty && etaDetails[choosenVehicle]['has_discount'] == true && etaDetails[choosenVehicle]['user_wallet_balance'] >= etaDetails[choosenVehicle]['discounted_totel'])) ||
+                                                  //                       (rentalOption.isEmpty &&
+                                                  //                           etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                  //                               'wallet')) ||
+                                                  //                   ((rentalOption.isNotEmpty && (etaDetails[0]['user_wallet_balance'] >= rentalOption[choosenVehicle]['fare_amount']) && rentalOption[choosenVehicle]['has_discount'] == false) ||
+                                                  //                       (rentalOption.isNotEmpty &&
+                                                  //                           rentalOption[choosenVehicle]['has_discount'] ==
+                                                  //                               true &&
+                                                  //                           etaDetails[0]['user_wallet_balance'] >=
+                                                  //                               rentalOption[choosenVehicle][
+                                                  //                                   'discounted_totel']) ||
+                                                  //                       rentalOption.isNotEmpty &&
+                                                  //                           rentalOption[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] !=
+                                                  //                               'wallet'))) {
+                                                  //             setState(() {
+                                                  //               _isLoading =
+                                                  //                   true;
+                                                  //             });
+                                                  //             dropStopList
+                                                  //                 .clear();
+                                                  //             dynamic result;
+                                                  //             if (choosenVehicle !=
+                                                  //                 null) {
+                                                  //               if (widget
+                                                  //                       .type !=
+                                                  //                   1) {
+                                                  //                 if (etaDetails[
+                                                  //                             choosenVehicle]
+                                                  //                         [
+                                                  //                         'has_discount'] ==
+                                                  //                     false) {
+                                                  //                   if (addressList
+                                                  //                           .length >
+                                                  //                       2) {
+                                                  //                     for (var i =
+                                                  //                             1;
+                                                  //                         i < addressList.length;
+                                                  //                         i++) {
+                                                  //                       dropStopList.add(DropStops(
+                                                  //                           order:
+                                                  //                               i.toString(),
+                                                  //                           latitude: addressList[i].latlng.latitude,
+                                                  //                           longitude: addressList[i].latlng.longitude,
+                                                  //                           address: addressList[i].address));
+                                                  //                     }
+                                                  //                   }
+                                                  //                   result =
+                                                  //                       await createRequest();
+                                                  //                   if (result ==
+                                                  //                       'logout') {
+                                                  //                     navigateLogout();
+                                                  //                   }
+                                                  //                 } else {
+                                                  //                   if (addressList
+                                                  //                           .length >
+                                                  //                       2) {
+                                                  //                     for (var i =
+                                                  //                             1;
+                                                  //                         i < addressList.length;
+                                                  //                         i++) {
+                                                  //                       dropStopList.add(DropStops(
+                                                  //                           order:
+                                                  //                               i.toString(),
+                                                  //                           latitude: addressList[i].latlng.latitude,
+                                                  //                           longitude: addressList[i].latlng.longitude,
+                                                  //                           address: addressList[i].address));
+                                                  //                     }
+                                                  //                   }
+                                                  //                   result =
+                                                  //                       await createRequestWithPromo();
+                                                  //                   if (result ==
+                                                  //                       'logout') {
+                                                  //                     navigateLogout();
+                                                  //                   }
+                                                  //                 }
+                                                  //               } else {
+                                                  //                 if (rentalOption[
+                                                  //                             choosenVehicle]
+                                                  //                         [
+                                                  //                         'has_discount'] ==
+                                                  //                     false) {
+                                                  //                   result =
+                                                  //                       await createRentalRequest();
+                                                  //                   if (result ==
+                                                  //                       'logout') {
+                                                  //                     navigateLogout();
+                                                  //                   }
+                                                  //                 } else {
+                                                  //                   result =
+                                                  //                       await createRentalRequestWithPromo();
+                                                  //                   if (result ==
+                                                  //                       'logout') {
+                                                  //                     navigateLogout();
+                                                  //                   }
+                                                  //                 }
+                                                  //               }
+                                                  //             }
+                                                  //             if (result ==
+                                                  //                 'success') {
+                                                  //               timer();
+                                                  //             }
+                                                  //             setState(() {
+                                                  //               _isLoading =
+                                                  //                   false;
+                                                  //             });
+                                                  //           } else {
+                                                  //             setState(() {
+                                                  //               islowwalletbalance =
+                                                  //                   true;
+                                                  //             });
+                                                  //           }
+                                                  //         },
+                                                  //         text: languages[
+                                                  //                 choosenLanguage]
+                                                  //             [
+                                                  //             'text_book_now']),
+                                                  //   ],
+                                                  // ),
+                                                //),
                                               ],
                                             ),
                                           ))
@@ -2663,8 +3085,8 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                     ],
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                    height: media.width * 0.05),
+                                                // SizedBox(
+                                                //     height: media.width * 0.05),
                                                 Container(
                                                   width: media.width * 0.9,
                                                   decoration: BoxDecoration(
@@ -4364,24 +4786,22 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                 media.width * 0.05),
                                             child: Column(
                                               children: [
-                                                SizedBox(
-                                                  width: media.width * 0.9,
-                                                  child: MyText(
-                                                    text: languages[
-                                                            choosenLanguage]
-                                                        ['text_search_captain'],
-                                                    size:
-                                                        media.width * fourteen,
-                                                    fontweight: FontWeight.bold,
-                                                  ),
-                                                ),
+                                                // SizedBox(
+                                                //   width: media.width * 0.9,
+                                                //   child: MyText(
+                                                //     text: languages[
+                                                //             choosenLanguage]
+                                                //         ['text_search_captain'],
+                                                //     size:
+                                                //         media.width * fourteen,
+                                                //     fontweight: FontWeight.bold,
+                                                //   ),
+                                                // ),
                                                 SizedBox(
                                                   height: media.height * 0.02,
                                                 ),
                                                 MyText(
-                                                  text: languages[
-                                                          choosenLanguage]
-                                                      ['text_finddriverdesc'],
+                                                  text: 'Hold Tight Connecting to Captains....',
                                                   size: media.width * fourteen,
                                                   // textAlign: TextAlign.center,
                                                 ),
@@ -4389,24 +4809,25 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                   height: media.height * 0.02,
                                                 ),
                                                 SizedBox(
-                                                  height: media.width * 0.4,
+                                                  height: media.width * 0.3,
+                                                  width: media.width * 0.6,
                                                   child: Image.asset(
-                                                    'assets/images/ridesearching.png',
-                                                    fit: BoxFit.contain,
+                                                    'assets/images/logo.png',
+                                                    fit: BoxFit.fill,
                                                   ),
                                                 ),
                                                 SizedBox(
                                                   height: media.height * 0.02,
                                                 ),
                                                 Container(
-                                                  height: media.width * 0.048,
+                                                  height: media.width * 0.01,
                                                   width: media.width * 0.9,
                                                   decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               media.width *
                                                                   0.024),
-                                                      color: Colors.grey),
+                                                      color: Colors.white24),
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Container(
@@ -4425,27 +4846,37 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                         color: buttonColor),
                                                   ),
                                                 ),
+                                                // SizedBox(
+                                                //   height: media.height * 0.01,
+                                                // ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.end,
+                                                //   children: [
+                                                //     (timing != null)
+                                                //         ? Text(
+                                                //             '${Duration(seconds: timing).toString().substring(3, 7)} mins',
+                                                //             style: GoogleFonts.notoSans(
+                                                //                 fontSize: media
+                                                //                         .width *
+                                                //                     ten,
+                                                //                 color: textColor
+                                                //                     .withOpacity(
+                                                //                         0.4)),
+                                                //           )
+                                                //         : Container()
+                                                //   ],
+                                                // ),
+
                                                 SizedBox(
-                                                  height: media.height * 0.02,
+                                                  height: media.height * 0.01,
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    (timing != null)
-                                                        ? Text(
-                                                            '${Duration(seconds: timing).toString().substring(3, 7)} mins',
-                                                            style: GoogleFonts.notoSans(
-                                                                fontSize: media
-                                                                        .width *
-                                                                    ten,
-                                                                color: textColor
-                                                                    .withOpacity(
-                                                                        0.4)),
-                                                          )
-                                                        : Container()
-                                                  ],
-                                                ),
+                                                Text('Booking in pro mode is 20X faster...',
+                                                    style:GoogleFonts.notoSans(
+                                                  color:Colors.white24,
+                                                      fontSize: 16
+
+                                                )),
                                                 SizedBox(
                                                   height: media.height * 0.02,
                                                 ),
@@ -4465,6 +4896,358 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                             ),
                                           ),
                                         )
+                                      : Container(),
+
+                                  // pro rider detail
+                                  (pro==1 && userRequestData.isNotEmpty &&
+                                      userRequestData['is_later'] ==
+                                          null &&
+                                      userRequestData['accepted_at'] ==
+                                          null ||
+                                      userRequestData.isNotEmpty &&
+                                          userRequestData['is_later'] ==
+                                              0 &&
+                                          userRequestData['accepted_at'] ==
+                                              null)
+                                      ? Positioned(
+                                    bottom: 0,
+                                    child: Container(
+                                      height: MediaQuery.of(context).size.height*.5,
+                                      width: media.width * 1,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        const BorderRadius.only(
+                                            topLeft:
+                                            Radius.circular(48),
+                                            topRight:
+                                            Radius.circular(48)),
+                                        color: page,
+                                      ),
+                                      padding: EdgeInsets.all(
+                                          media.width * 0.05),
+                                      child:
+
+                                         Column(
+                                          children: [
+
+                                            SizedBox(
+                                              height: 8,
+                                            ),
+
+                                            Text('Select Your Captain',style: GoogleFonts.notoSans(
+                                              color: Colors.white,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+
+                                            ),),
+
+                                            Padding(
+                                              padding:const EdgeInsets.only(top:8),
+                                            child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+
+                                                children: [
+                                              //search bar
+                                              SizedBox(
+                                              width:MediaQuery.of(context).size.width*0.6,
+                                              height: 56,
+                                              child: TextField(
+                                                cursorColor: Colors.white,
+                                                decoration: InputDecoration(
+                                                  prefixIcon: Icon(Icons.search),
+                                                  fillColor: Colors.black.withOpacity(.8),
+                                                  focusColor: Colors.white,
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: Colors.white), // Set the color for focused border
+                                                    borderRadius: BorderRadius.circular(24),
+                                                  ),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(24),
+                                                  ),
+                                                  // labelText: 'Filled',
+                                                  hintText: 'Search By Name, Car Number, driver id..',
+                                                  hintStyle: GoogleFonts.notoSans(
+                                                      color: Colors.white24
+                                                  ),
+                                                  filled: true,
+                                                ),
+                                            ),),
+                                                               SizedBox(width:MediaQuery.of(context).size.width*0.01),
+
+                                                  Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color:Colors.white.withOpacity(.1)
+                                                    ),
+                                                    child:Icon(Icons.downloading_sharp,
+                                                      color: Colors.white60,),
+                                                  ),
+                                                  SizedBox(width:MediaQuery.of(context).size.width*0.01),
+
+                                                  //Referral Icon
+                                                  Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color:Colors.white.withOpacity(.1),
+                                                    ),
+                                                    child:Icon(Icons.receipt_long_rounded,
+                                                        color: Colors.white60),
+                                                  ),
+
+
+                                                ])),
+
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8.0,right: 8,top:16),
+
+                                          //Captain Detail card
+                                          child:
+                                              Column(
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white12,
+                                                      borderRadius: BorderRadius.circular(16),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(16.0),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              Text('Ramesh',style: GoogleFonts.notoSans(color: Colors.white60,fontSize: 24,fontWeight: FontWeight.bold),),
+                                                              Text('₹ 50',style: GoogleFonts.notoSans(color: Colors.white60),),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              Text('Car Model',style: GoogleFonts.notoSans(color: Colors.white60,fontSize: 16),),
+                                                              // Text('12Min',style: GoogleFonts.notoSans(color: Colors.white60),),
+                                                            ],
+                                                          ),
+
+                                                          SizedBox(
+                                                            height: 8,
+                                                          ),
+
+                                                          Row(
+                                                            children: [
+                                                              Icon(Icons.star_rounded,color: Colors.white60),
+                                                              Icon(Icons.star_rounded,color: Colors.white60),
+                                                              Icon(Icons.star_rounded,color: Colors.white60),
+                                                              Icon(Icons.star_rounded,color: Colors.white60),
+                                                              Icon(Icons.star_half_rounded,color: Colors.white60),
+                                                            ],
+                                                          ),
+
+                                                          SizedBox(
+                                                            height: 16,
+                                                          ),
+
+                                                          Row(
+                                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+
+                                                              //Primary Button
+                                                              SizedBox(
+                                                                height:56,
+                                                                width: MediaQuery.of(context).size.width*0.38,
+                                                                child: ElevatedButton(
+                                                                  child: Text('Book Ride',style: GoogleFonts.notoSans(
+                                                                    color: Colors.white,
+
+                                                                  ),),
+                                                                  // Within the `FirstRoute` widget
+                                                                  onPressed: () {
+                                                                    Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(builder: (context) =>  Loading()),
+                                                                    );
+                                                                  },
+
+                                                                  style: ElevatedButton.styleFrom(
+                                                                      backgroundColor: Colors.black,
+                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24),),
+                                                                      textStyle: GoogleFonts.notoSans(
+                                                                        fontSize: 15,
+                                                                        fontWeight: FontWeight.bold,
+                                                                        color: Colors.white,
+                                                                      )),
+                                                                ),
+                                                              ),
+
+                                                              SizedBox(width:MediaQuery.of(context).size.width*0.022),
+
+                                                              //Secondary Button
+                                                              SizedBox(
+                                                                height:56,
+                                                                width: MediaQuery.of(context).size.width*0.38,
+                                                                child: OutlinedButton(
+                                                                  child: Text('View Details',style: GoogleFonts.notoSans(
+                                                                      color: Colors.white
+                                                                  ),),
+                                                                  onPressed: () {
+                                                                    showModalBottomSheet<void>(
+                                                                    context: context,
+                                                                    builder: (BuildContext context) {
+                                                                      return Container(
+                                                                        height: media.width*.7,
+                                                                        width: MediaQuery.of(context).size.width,
+                                                                        decoration: BoxDecoration(
+                                                                          color: Colors.black,
+
+                                                                        ),
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.only(left:16,top:32),
+                                                                          child: Column(
+                                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                            children: [
+
+                                                                              Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  CircleAvatar(
+                                                                                    radius: 40,
+                                                                                    backgroundColor: Colors.white,
+                                                                                    child: Image.asset('assets/images/profile.png'),
+                                                                                  ),
+                                                                                  SizedBox(width: MediaQuery.of(context).size.width*.02,),
+                                                                                  Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                                    children: [
+                                                                                      Text('Driver Name',
+                                                                                        style: GoogleFonts.notoSans(
+                                                                                          color: Colors.white,
+                                                                                          fontSize: 24,
+                                                                                          fontWeight: FontWeight.w300,
+                                                                                        ),),
+                                                                                      SizedBox(height: MediaQuery.of(context).size.width*.01,),
+                                                                                      Text('Car Model',
+                                                                                        style: GoogleFonts.notoSans(
+                                                                                          color: Colors.white24,
+                                                                                          fontSize: 16,
+                                                                                          fontWeight: FontWeight.w300,
+                                                                                        ),),
+                                                                                      SizedBox(height: MediaQuery.of(context).size.width*.01,),
+                                                                                      Icon(Icons.star_rounded,color: Colors.white24,size: 24,),
+
+                                                                                    ],
+                                                                                  ),
+
+                                                                                ],
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(top:16),
+                                                                                child: Row(
+                                                                                  children: [
+                                                                                    Container(
+                                                                                      height: MediaQuery.of(context).size.width*.13,
+                                                                                      width: MediaQuery.of(context).size.width*.45,
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.white10,
+                                                                                        borderRadius: BorderRadius.circular(24),
+
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: Row(
+                                                                                         crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Icon(Icons.messenger_rounded,color: Colors.white24,size: 24,),
+                                                                                            SizedBox(width: MediaQuery.of(context).size.width*.02,),
+                                                                                            Text('Message Captain',
+                                                                                              style: GoogleFonts.notoSans(
+                                                                                                color: Colors.white70,
+                                                                                                fontSize: 16,
+                                                                                                fontWeight: FontWeight.w300,
+                                                                                              ),),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+
+                                                                                    SizedBox(width: MediaQuery.of(context).size.width*.02,),
+
+
+                                                                                    Container(
+                                                                                      height: MediaQuery.of(context).size.width*.13,
+                                                                                      width: MediaQuery.of(context).size.width*.45,
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.white10,
+                                                                                        borderRadius: BorderRadius.circular(24),
+
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: Row(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Icon(Icons.call_rounded,color: Colors.white24,size: 24,),
+                                                                                            SizedBox(width: MediaQuery.of(context).size.width*.02,),
+                                                                                            Text('Call Captain',
+                                                                                              style: GoogleFonts.notoSans(
+                                                                                                color: Colors.white70,
+                                                                                                fontSize: 16,
+                                                                                                fontWeight: FontWeight.w300,
+                                                                                              ),),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+
+
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    }
+                                                                    );
+                                                                  },
+
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    // backgroundColor: Colors.white.withOpacity(.1),
+                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24),),
+                                                                      textStyle: GoogleFonts.notoSans(
+                                                                        fontSize: 15,
+                                                                        fontWeight: FontWeight.bold,
+                                                                        // color: Colors.white,
+                                                                      )),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+
+
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+
+
+                                                ]
+                                              ),
+
+
+                                            ),
+                                          ],
+
+
+                                      ),
+                                    ),
+                                  )
                                       : Container(),
                                   (userRequestData.isNotEmpty &&
                                           userRequestData['accepted_at'] !=
